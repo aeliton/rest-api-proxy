@@ -1,0 +1,16 @@
+[project]
+name = "rest-api-proxy"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "djangorestframework>=3.16.1",
+]
+
+[dependency-groups]
+dev = [
+    "uv==0.9.8",
+    "requests>=2.32.5",
+    "responses>=0.25.8",
+]
