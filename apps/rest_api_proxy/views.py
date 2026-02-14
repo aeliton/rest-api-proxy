@@ -1,11 +1,14 @@
 from rest_framework.views import APIView
-from rest_framework import permissions
-from apps.rest_api_proxy.settings import rest_api_proxy_settings
+from apps.rest_api_proxy.settings import rest_api_proxy_settings, RAPSettings
 import requests
 
 
 class ProxyBase(APIView):
-    proxy_settings = rest_api_proxy_settings
+    def __init__(self, proxy_settings=None):
+        if proxy_settings:
+            self.proxy_settings = RAPSettings(proxy_settings)
+        else:
+            self.proxy_settings = rest_api_proxy_settings
 
     def proxy_host(self):
         return self.proxy_settings.HOST
