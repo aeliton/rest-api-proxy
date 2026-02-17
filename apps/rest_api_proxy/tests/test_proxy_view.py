@@ -1,4 +1,5 @@
 from .utils import parametrize
+from rest_framework.request import Request
 from rest_framework.test import APITestCase
 from rest_framework.test import APIRequestFactory
 from rest_framework import status
@@ -13,12 +14,12 @@ test_url = f'{test_base_url}{test_path}'
 
 class ProxyBaseTestCase(APITestCase):
     def setUp(self):
-        self.proxy = ProxyBase({'HOST': test_base_url})
         self.factory = APIRequestFactory()
 
     def test_proxy_url(self):
+        proxy = ProxyBase(proxy_settings={'HOST': test_base_url})
         request = self.factory.get(test_path)
-        self.assertEqual(self.proxy.proxy_url(request), test_url)
+        self.assertEqual(proxy.proxy_url(request), test_url)
 
     @responses.activate
     @parametrize('method', [("get",), ("post",), ("put",), ("patch",),
@@ -30,6 +31,6 @@ class ProxyBaseTestCase(APITestCase):
             status=200
         )
         request = self.factory.get(test_path)
-        endpoint = getattr(self.proxy, method)
-        response = endpoint(request)
+        proxy = ProxyBase.as_view(proxy_settings={'HOST': test_base_url})
+        response = proxy(request)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
