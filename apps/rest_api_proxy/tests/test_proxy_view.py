@@ -1,3 +1,4 @@
+from .utils import parametrize
 from rest_framework.test import APITestCase
 from rest_framework.test import APIRequestFactory
 from rest_framework import status
@@ -20,12 +21,15 @@ class ProxyBaseTestCase(APITestCase):
         self.assertEqual(self.proxy.proxy_url(request), test_url)
 
     @responses.activate
-    def test_request_proxied_service(self):
+    @parametrize('method', [("get",), ("post",), ("put",), ("patch",),
+                            ("delete",), ("head",), ("options",), ("trace",),])
+    def test_base_proxy_forwards_all_methods(self, method):
         responses.add(
-            responses.GET,
+            method.upper(),
             test_url,
             status=200
         )
         request = self.factory.get(test_path)
-        response = self.proxy.get(request)
+        endpoint = getattr(self.proxy, method)
+        response = endpoint(request)
         self.assertEqual(response.status_code, status.HTTP_200_OK)

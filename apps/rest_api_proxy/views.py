@@ -5,10 +5,15 @@ import requests
 
 class ProxyBase(APIView):
     def __init__(self, proxy_settings=None):
+        super().__init__()
+
         if proxy_settings:
             self.proxy_settings = RAPSettings(proxy_settings)
         else:
             self.proxy_settings = rest_api_proxy_settings
+
+        for method in self.http_method_names:
+            setattr(self, method, self.forward)
 
     def proxy_host(self):
         return self.proxy_settings.HOST
@@ -16,13 +21,10 @@ class ProxyBase(APIView):
     def proxy_url(self, request):
         return ''.join([self.proxy_host(), request.get_full_path()])
 
-    def forward(self, request):
-        return requests.request(request.method, self.proxy_url(request))
-
-    def get(self, request, format=None):
-        new_request = self.process_request(request)
-        new_response = self.process_response(self.forward(new_request))
-        return new_response
+    def forward(self, incoming_request):
+        request = self.process_request(incoming_request)
+        response = requests.request(request.method, self.proxy_url(request))
+        return self.process_response(response)
 
     def process_request(self, request):
         return request
