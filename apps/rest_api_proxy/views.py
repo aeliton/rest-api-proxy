@@ -2,6 +2,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from apps.rest_api_proxy.settings import rest_api_proxy_settings, RAPSettings
 import requests
+from django.http import HttpHeaders
 
 
 class ProxyBase(APIView):
@@ -26,10 +27,18 @@ class ProxyBase(APIView):
 
     def proxy(self, request):
         input = self.process_request(request)
-        output = self.process_response(
-            requests.request(input.method, self.proxy_url(input))
+
+        # Copy defult HTTP input headers
+        headers = {k: v for k, v in HttpHeaders(input.META).items() if v}
+
+        output = requests.request(
+            input.method,
+            self.proxy_url(input),
+            headers=headers
         )
-        return Response(status=output.status_code)
+
+        response = self.process_response(output)
+        return Response(status=response.status_code)
 
     def process_request(self, request):
         return request
