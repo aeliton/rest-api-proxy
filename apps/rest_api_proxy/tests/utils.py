@@ -5,5 +5,3 @@ def parametrize(names: str, entries: list[tuple]):
                 func(self, **dict(zip(names.split(','), entry)))
         return wrap
     return inner
-
-
