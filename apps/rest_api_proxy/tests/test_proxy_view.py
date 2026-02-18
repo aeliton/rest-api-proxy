@@ -4,6 +4,7 @@ from rest_framework.test import APIRequestFactory
 from rest_framework import status
 from apps.rest_api_proxy.views import ProxyBase
 import responses
+from responses import matchers
 
 
 test_base_url = 'http://t.io'
@@ -33,4 +34,26 @@ class ProxyBaseTestCase(APITestCase):
         request = self.factory.get(test_path)
         proxy = ProxyBase.as_view(proxy_settings=proxy_settings)
         response = proxy(request)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    @responses.activate
+    @parametrize('header,value', [("Authorization", "token 123"),
+                                  ("Accept", "application/json"),
+                                  ("Custom", "xyz"), ])
+    def test_forward_headers(self, header, value):
+        responses.add(
+            responses.GET,
+            test_url,
+            match=[matchers.header_matcher({header: value})],
+            status=200,
+        )
+
+        # Django will change the request headers according to:
+        # https://docs.djangoproject.com/en/6.0/ref/request-response/#django.http.HttpRequest.META
+        django_headers = {'HTTP_%s' % header.upper().replace("-", "_"): value}
+        request = self.factory.get(test_path, **django_headers)
+
+        proxy = ProxyBase.as_view(proxy_settings=proxy_settings)
+        response = proxy(request)
+
         self.assertEqual(response.status_code, status.HTTP_200_OK)
