@@ -58,3 +58,19 @@ class ProxyBaseTestCase(APITestCase):
         response = proxy(request)
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    @responses.activate
+    def test_forward_unchanged_body(self):
+        responses.add(
+            responses.POST,
+            test_url,
+            match=[matchers.body_matcher('the-body')],
+            status=200,
+        )
+
+        request = self.factory.generic(responses.POST, test_path, 'the-body')
+
+        proxy = ProxyBase.as_view(proxy_settings=proxy_settings)
+        response = proxy(request)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)

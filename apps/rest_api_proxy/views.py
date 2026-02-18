@@ -34,7 +34,8 @@ class ProxyBase(APIView):
         output = requests.request(
             input.method,
             self.proxy_url(input),
-            headers=headers
+            headers=headers,
+            data=input.body,
         )
 
         response = self.process_response(output)
