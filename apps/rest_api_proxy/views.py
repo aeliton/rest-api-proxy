@@ -28,7 +28,7 @@ class ProxyBase(APIView):
     def proxy(self, request):
         input = self.process_request(request)
 
-        # Copy defult HTTP input headers
+        # Copy default HTTP input headers
         headers = {k: v for k, v in HttpHeaders(input.META).items() if v}
 
         extra = {}
