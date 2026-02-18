@@ -5,6 +5,7 @@ from rest_framework import status
 from apps.rest_api_proxy.views import ProxyBase
 import responses
 from responses import matchers
+from django.core.files.uploadedfile import SimpleUploadedFile
 
 
 test_base_url = 'http://t.io'
@@ -73,4 +74,27 @@ class ProxyBaseTestCase(APITestCase):
         proxy = ProxyBase.as_view(proxy_settings=proxy_settings)
         response = proxy(request)
 
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    @responses.activate
+    def test_forward_unchanged_file(self):
+        file_content = b"my-master-piece-text"
+        file = SimpleUploadedFile("unusual-filename.txt", file_content)
+
+        # Matcher to check if the filename and file content are both present
+        # in the received request body
+        def file_matcher(request):
+            tokens = [file.name.encode('utf-8'), file_content]
+            received = all(token in request.body for token in tokens)
+            return received, ""
+        responses.post(test_url, match=[file_matcher], status=200)
+
+        request = self.factory.post(
+            test_path,
+            {'file': file},
+            format='multipart'
+        )
+
+        proxy = ProxyBase.as_view(proxy_settings=proxy_settings)
+        response = proxy(request)
         self.assertEqual(response.status_code, status.HTTP_200_OK)

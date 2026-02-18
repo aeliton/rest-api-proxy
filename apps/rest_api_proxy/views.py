@@ -31,11 +31,21 @@ class ProxyBase(APIView):
         # Copy defult HTTP input headers
         headers = {k: v for k, v in HttpHeaders(input.META).items() if v}
 
+        extra = {}
+        if input.content_type.startswith('multipart'):
+            extra['data'] = input.data
+            if input.FILES:
+                extra['files'] = {}
+                for field, content in input.FILES.items():
+                    extra['files'][field] = content
+        else:
+            extra['data'] = input.body
+
         output = requests.request(
             input.method,
             self.proxy_url(input),
             headers=headers,
-            data=input.body,
+            **extra,
         )
 
         response = self.process_response(output)
