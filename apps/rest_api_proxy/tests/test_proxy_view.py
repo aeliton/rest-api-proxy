@@ -1,5 +1,4 @@
 from .utils import parametrize
-from rest_framework.request import Request
 from rest_framework.test import APITestCase
 from rest_framework.test import APIRequestFactory
 from rest_framework import status
