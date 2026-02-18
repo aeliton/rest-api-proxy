@@ -31,7 +31,7 @@ class ProxyBaseTestCase(APITestCase):
             test_url,
             status=200
         )
-        request = self.factory.get(test_path)
+        request = self.factory.generic(method.upper(), test_path)
         proxy = ProxyBase.as_view(proxy_settings=proxy_settings)
         response = proxy(request)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -51,7 +51,8 @@ class ProxyBaseTestCase(APITestCase):
         # Django will change the request headers according to:
         # https://docs.djangoproject.com/en/6.0/ref/request-response/#django.http.HttpRequest.META
         django_headers = {'HTTP_%s' % header.upper().replace("-", "_"): value}
-        request = self.factory.get(test_path, **django_headers)
+
+        request = self.factory.generic(responses.GET, test_path, **django_headers)
 
         proxy = ProxyBase.as_view(proxy_settings=proxy_settings)
         response = proxy(request)
