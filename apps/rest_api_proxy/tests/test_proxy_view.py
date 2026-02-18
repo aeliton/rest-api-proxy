@@ -9,6 +9,7 @@ import responses
 test_base_url = 'http://t.io'
 test_path = '/api/test'
 test_url = f'{test_base_url}{test_path}'
+proxy_settings = {'HOST': test_base_url}
 
 
 class ProxyBaseTestCase(APITestCase):
@@ -16,7 +17,7 @@ class ProxyBaseTestCase(APITestCase):
         self.factory = APIRequestFactory()
 
     def test_proxy_url(self):
-        proxy = ProxyBase(proxy_settings={'HOST': test_base_url})
+        proxy = ProxyBase(proxy_settings=proxy_settings)
         request = self.factory.get(test_path)
         self.assertEqual(proxy.proxy_url(request), test_url)
 
@@ -30,6 +31,6 @@ class ProxyBaseTestCase(APITestCase):
             status=200
         )
         request = self.factory.get(test_path)
-        proxy = ProxyBase.as_view(proxy_settings={'HOST': test_base_url})
+        proxy = ProxyBase.as_view(proxy_settings=proxy_settings)
         response = proxy(request)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
