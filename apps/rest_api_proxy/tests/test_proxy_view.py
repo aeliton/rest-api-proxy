@@ -1,11 +1,11 @@
-from .utils import parametrize
 from rest_framework.test import APITestCase
 from rest_framework.test import APIRequestFactory
 from rest_framework import status
-from apps.rest_api_proxy.views import ProxyBase
-import responses
-from responses import matchers
 from django.core.files.uploadedfile import SimpleUploadedFile
+from apps.rest_api_proxy.views import ProxyBase
+from .utils import parametrize
+from responses import matchers
+import responses
 
 
 test_base_url = 'http://t.io'
@@ -97,4 +97,22 @@ class ProxyBaseTestCase(APITestCase):
 
         proxy = ProxyBase.as_view(proxy_settings=proxy_settings)
         response = proxy(request)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    @responses.activate
+    def test_download_in_memory_file(self):
+        data = b'rocoli'
+
+        responses.add(
+            responses.GET,
+            test_url,
+            body=data,
+            status=200,
+        )
+
+        request = self.factory.get(test_path)
+        proxy = ProxyBase.as_view(proxy_settings=proxy_settings)
+        response = proxy(request)
+
+        self.assertEqual(response.content, data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
