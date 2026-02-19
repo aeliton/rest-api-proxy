@@ -1,8 +1,7 @@
 from rest_framework.views import APIView
-from rest_framework.response import Response
 from apps.rest_api_proxy.settings import rest_api_proxy_settings, RAPSettings
+from django.http import HttpHeaders, HttpResponse
 import requests
-from django.http import HttpHeaders
 
 
 class ProxyBase(APIView):
@@ -49,7 +48,8 @@ class ProxyBase(APIView):
         )
 
         response = self.process_response(output)
-        return Response(status=response.status_code)
+        return HttpResponse(response.content, status=response.status_code,
+                            headers=response.headers)
 
     def process_request(self, request):
         return request
