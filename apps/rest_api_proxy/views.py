@@ -1,7 +1,7 @@
 from rest_framework.views import APIView
 from apps.rest_api_proxy.settings import rest_api_proxy_settings, RAPSettings
-import requests
 from django.http import HttpHeaders, HttpResponse
+import requests
 
 
 class ProxyBase(APIView):
