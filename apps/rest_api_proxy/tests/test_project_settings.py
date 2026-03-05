@@ -1,4 +1,3 @@
-import pytest
 from rest_framework.test import APITestCase
 from apps.rest_api_proxy.views import ProxyBase
 from django.conf import settings
