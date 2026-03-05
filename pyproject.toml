@@ -2,6 +2,9 @@
 name = "rest-api-proxy"
 version = "0.0.1"
 description = "Alters and forwards incoming API requests"
+authors = [
+  {name = "Aeliton G. Silva", email = "aeliton@aeliton.com"},
+]
 readme = "README.md"
 license = "BSD-2-Clause"
 license-files = ["LICENSE", "AUTHORS.md"]
@@ -28,10 +31,6 @@ Documentation = "https://readthedocs.org"
 Repository = "https://github.com/aeliton/rest-api-proxy.git"
 Issues = "https://github.com/aeliton/rest-api-proxy/issues/"
 Changelog = "https://github.com/me/spam/blob/master/CHANGELOG.md"
-
-authors = [
-  {name = "Aeliton G. Silva", email = "aeliton@aeliton.com"},
-]
 
 [dependency-groups]
 dev = [
