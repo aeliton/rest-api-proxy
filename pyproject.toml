@@ -38,5 +38,9 @@ dev = [
     "uv==0.9.8",
     "requests>=2.32.5",
     "responses>=0.25.8",
-    "flake8",
+    "flake8>=7.3.0",
+    "flake8-pyproject>=1.2.4",
 ]
+
+[tool.flake8]
+max-line-length = 88
