@@ -1,5 +1,5 @@
 from rest_framework.views import APIView
-from apps.rest_api_proxy.settings import rest_api_proxy_settings, RAPSettings
+from rest_api_proxy.settings import rest_api_proxy_settings, RAPSettings
 from django.http import HttpHeaders, HttpResponse
 import requests
 

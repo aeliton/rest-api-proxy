@@ -2,7 +2,7 @@ from rest_framework.test import APITestCase
 from rest_framework.test import APIRequestFactory
 from rest_framework import status
 from django.core.files.uploadedfile import SimpleUploadedFile
-from apps.rest_api_proxy.views import ProxyBase
+from rest_api_proxy.views import ProxyBase
 from .utils import parametrize
 from responses import matchers
 import responses
