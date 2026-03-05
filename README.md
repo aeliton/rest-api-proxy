@@ -49,6 +49,12 @@ class Proxy(ProxyBase):
         return response
 ```
 
+## Running tests
+
+```bash
+python runtests.py
+```
+
 # License
 
 [rest-api-proxy](README.md) is offered under the BSD-2-Clause license.
