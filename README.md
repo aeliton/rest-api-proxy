@@ -1,3 +1,5 @@
+![build][1] ![docker-image][2]
+
 # rest-api-proxy
 
 Another [DRF](https://www.django-rest-framework.org/) API proxy to redirect
@@ -65,3 +67,5 @@ This work is inspired by
 [django-api-proxy](https://github.com/aiselis/django-api-proxy/) (Simplified BSD
 License).
 
+[1]: https://github.com/aeliton/rest-api-proxy/actions/workflows/pypi-publish.yml/badge.svg?branch=main
+[2]: https://github.com/aeliton/rest-api-proxy/actions/workflows/python-app.yml/badge.svg?branch=main
