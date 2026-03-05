@@ -1,11 +1,36 @@
 [project]
 name = "rest-api-proxy"
-version = "0.1.0"
-description = "Add your description here"
+version = "0.0.1"
+description = "Alters and forwards incoming API requests"
 readme = "README.md"
+license = "BSD-2-Clause"
+license-files = ["LICENSE", "AUTHORS.md"]
+keywords = ["django", "DRF", "api-proxy", "proxy"]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Intended Audience :: Developers",
+  "Topic :: Software Development :: Libraries",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.14",
+  "Framework :: Django :: 5.2",
+]
 requires-python = ">=3.11"
 dependencies = [
     "djangorestframework>=3.16.1",
+]
+
+[project.urls]
+Homepage = "https://github.com/aeliton/rest-api-proxy"
+Documentation = "https://readthedocs.org"
+Repository = "https://github.com/aeliton/rest-api-proxy.git"
+Issues = "https://github.com/aeliton/rest-api-proxy/issues/"
+Changelog = "https://github.com/me/spam/blob/master/CHANGELOG.md"
+
+authors = [
+  {name = "Aeliton G. Silva", email = "aeliton@aeliton.com"},
 ]
 
 [dependency-groups]
