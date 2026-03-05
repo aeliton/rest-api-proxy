@@ -51,6 +51,14 @@ class Proxy(ProxyBase):
         return response
 ```
 
+## Development
+
+To install dependencies run:
+
+```bash
+uv sync --dev
+```
+
 ## Running tests
 
 ```bash
