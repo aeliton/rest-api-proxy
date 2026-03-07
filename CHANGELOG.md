@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased] 
 
+### Added
+
+- Add `FORWARD_HEADERS` to settings.
+
+### Changed
+
+- Only headers stated in `FORWARD_HEADERS` are forwarded.
+
 ## [0.0.1] 2026-03-04
 
 ### Added

@@ -2,6 +2,7 @@ from django.conf import settings
 
 DEFAULTS = {
     'HOST': None,
+    'FORWARD_HEADERS': []
 }
 
 

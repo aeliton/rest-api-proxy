@@ -5,7 +5,7 @@ import requests
 
 
 class ProxyBase(APIView):
-    proxy_settings = None
+    proxy_settings: dict = None
 
     def __init__(self, proxy_settings=None):
         super().__init__()
@@ -27,8 +27,9 @@ class ProxyBase(APIView):
     def proxy(self, request):
         input = self.process_request(request)
 
-        # Copy default HTTP input headers
-        headers = {k: v for k, v in HttpHeaders(input.META).items() if v}
+        # Copy headers that must be forwarded
+        headers = {k: v for k, v in HttpHeaders(input.META).items() if k in
+                   self.proxy_settings.FORWARD_HEADERS}
 
         extra = {}
         if input.content_type.startswith('multipart'):

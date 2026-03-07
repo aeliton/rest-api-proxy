@@ -55,7 +55,9 @@ class ProxyBaseTestCase(APITestCase):
 
         request = self.factory.generic(responses.GET, test_path, **headers)
 
-        proxy = ProxyBase.as_view(proxy_settings=proxy_settings)
+        proxy = ProxyBase.as_view(
+            proxy_settings=proxy_settings | {'FORWARD_HEADERS': [header]}
+        )
         response = proxy(request)
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
