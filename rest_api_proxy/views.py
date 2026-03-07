@@ -38,6 +38,8 @@ class ProxyBase(APIView):
                 extra['files'] = {}
                 for field, content in input.FILES.items():
                     extra['files'][field] = content
+                    # remove duplication of file entries
+                    extra['data'].pop(field, None)
         else:
             extra['data'] = input.body
 
