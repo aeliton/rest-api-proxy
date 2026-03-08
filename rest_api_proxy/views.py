@@ -36,8 +36,13 @@ class ProxyBase(APIView):
             files=files,
         )
         response = self.process_response(output)
-        return HttpResponse(response.content, status=response.status_code,
-                            headers=response.headers)
+        if hasattr(response, 'content'):
+            return HttpResponse(response.content, status=response.status_code,
+                                headers=response.headers)
+        else:
+            return HttpResponse(response.streaming_content,
+                                status=response.status_code,
+                                headers=response.headers)
 
     def _process_headers(self, request):
         # Copy headers that must be forwarded
