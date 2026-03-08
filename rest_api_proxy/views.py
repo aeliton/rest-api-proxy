@@ -24,7 +24,7 @@ class ProxyBase(APIView):
     def proxy_url(self, request):
         return ''.join([self.proxy_host(), request.get_full_path()])
 
-    def proxy(self, request):
+    def proxy(self, request, *args, **kwargs):
         headers = self._process_headers(request)
         data = self._process_data(request)
         files = self._process_files(request)
