@@ -25,34 +25,50 @@ class ProxyBase(APIView):
         return ''.join([self.proxy_host(), request.get_full_path()])
 
     def proxy(self, request):
-        input = self.process_request(request)
-
-        # Copy headers that must be forwarded
-        headers = {k: v for k, v in HttpHeaders(input.META).items() if k in
-                   self.proxy_settings.FORWARD_HEADERS}
-
-        extra = {}
-        if input.content_type.startswith('multipart'):
-            extra['data'] = input.data
-            if input.FILES:
-                extra['files'] = {}
-                for field, content in input.FILES.items():
-                    extra['files'][field] = content
-                    # remove duplication of file entries
-                    extra['data'].pop(field, None)
-        else:
-            extra['data'] = input.body
-
+        headers = self._process_headers(request)
+        data = self._process_data(request)
+        files = self._process_files(request)
         output = requests.request(
-            input.method,
-            self.proxy_url(input),
+            request.method,
+            self.proxy_url(request),
             headers=headers,
-            **extra,
+            data=data,
+            files=files,
         )
-
         response = self.process_response(output)
         return HttpResponse(response.content, status=response.status_code,
                             headers=response.headers)
+
+    def _process_headers(self, request):
+        # Copy headers that must be forwarded
+        return self.process_headers({
+            k: v for k, v in HttpHeaders(request.META).items()
+            if k in self.proxy_settings.FORWARD_HEADERS
+        })
+
+    def _process_data(self, request):
+        if request.content_type.startswith('multipart'):
+            data = request.data
+            if request.FILES:
+                for file, _ in request.FILES.items():
+                    data.pop(file, None)
+        else:
+            data = request.body
+        return self.process_data(data)
+
+    def _process_files(self, request):
+        if request.content_type.startswith('multipart') and request.FILES:
+            return self.process_files({k: v for k, v in request.FILES.items()})
+        return None
+
+    def process_headers(self, headers: dict) -> dict:
+        return headers
+
+    def process_data(self, data):
+        return data
+
+    def process_files(self, files: dict) -> dict:
+        return files
 
     def process_request(self, request):
         return request
