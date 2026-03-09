@@ -44,3 +44,6 @@ dev = [
     "flake8>=7.3.0",
     "flake8-pyproject>=1.2.4",
 ]
+
+[tool.hatch.version]
+source = "uv-dynamic-versioning"
