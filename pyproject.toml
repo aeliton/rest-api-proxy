@@ -1,3 +1,7 @@
+[build-system]
+requires = ["hatchling", "uv-dynamic-versioning"]
+build-backend = "hatchling.build"
+
 [project]
 name = "rest-api-proxy"
 dynamic = ["version"]
