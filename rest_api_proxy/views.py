@@ -5,9 +5,49 @@ import requests
 
 
 class ProxyBase(APIView):
+    """
+    Basic proxy class to enable simple interceptor implementation.
+
+    Default Behaviour
+    -----------------
+
+    The default processing of the incoming request is to construct a new request
+    from parts of the incoming request. The members of the request that are
+    forwarded and how they are processed by default are:
+
+    files: are extracted to be sent to the target as they come. Override
+    `process_files` to change this behaviour.
+
+    data: case `data` is of type dict, all file entries (from request.FILES)
+    will be removed to avoid duplication. Override `process_data` to change this
+    behaviour.
+
+    headers: Only HTTP headers (e.g. 'Authorization') explicitly set in
+    `FORWARD_HEADERS` settings will be forwarded. Override `process_headers` to
+    change this behaviour.
+
+    Once the new request is constructed as described above, it will be sent to
+    the target API and the response received will be then passed through
+    `process_response` that can construct a modified response object to be
+    returned to the request originator.
+
+    Attributes:
+        proxy_settings: Settings to be used to initialize the instance.
+    """
     proxy_settings: dict = None
 
     def __init__(self, proxy_settings=None):
+        """
+        Initializes a ProxyBase instance.
+
+        Arguments:
+        ----------
+
+        proxy_settings: dict containing the following entries and values:
+        - HOST: str, the target server URL.
+        - FORWARD_HEADERS: list[str], all headers from the incoming request
+          that must be forwarded to the target server (e.g. 'Authorization').
+        """
         super().__init__()
 
         if proxy_settings:
@@ -69,13 +109,72 @@ class ProxyBase(APIView):
         return None
 
     def process_headers(self, request, headers: dict) -> dict:
+        """
+        Processes the incoming request headers.
+
+        Override this function to return the desired set of headers to be sent
+        to the target API.
+
+        Arguments
+        ---------
+        request: the incoming request.
+        headers: dict, headers defined in `FORWARD_HEADERS` and their respective
+        values extracted from `request`.
+
+        Returns
+        -------
+        dict containing the HTTP headers and their values.
+        """
         return headers
 
     def process_data(self, request, data):
+        """
+        Process the incoming request data.
+
+        Override this function to alter the request.data.
+
+        Arguments
+        ---------
+        request: the incoming request.
+        data: dict or text, extracted from request.data.
+
+        Returns
+        -------
+        dict or text to be set as request.data to be sent to the target API.
+        """
         return data
 
     def process_files(self, request, files: dict) -> dict:
+        """
+        Process the incoming request files.
+
+        Override this function to alter the files received in the incoming
+        request.
+
+        Arguments
+        ---------
+        request: the incoming request.
+        files: dict of str and file-like objects, extracted from
+        request.FILES.
+
+        Returns
+        -------
+        dict containing {'file names': <file-like-object>}.
+        """
         return files
 
     def process_response(self, response):
+        """
+        Process the outgoing request.
+
+        Override this function to alter the response given by the target API.
+
+        Arguments
+        ---------
+        response: the response received from the target API.
+
+        Returns
+        -------
+        a response object to be sent as reply for the incoming request.
+        """
         return response
