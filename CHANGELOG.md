@@ -9,12 +9,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - Add `FORWARD_HEADERS` to settings.
+- Add `ProxyBase.process_{headers,data,files}` functions.
 ### Changed
 - Only headers stated in `FORWARD_HEADERS` are forwarded.
+### Removed
+- Remove `ProxyBase.process_request` in favor of more granular
+  `process_{headers, data, files}`.
 ### Fixed
 - Remove duplicated file entries on request.data.
 
-## [0.0.1] 2026-03-04
+## [0.0.1] -- 2026-03-04
 
 ### Added
 - Basic unit tests for current basic features.
