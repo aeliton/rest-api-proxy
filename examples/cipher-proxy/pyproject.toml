@@ -1,0 +1,15 @@
+[project]
+name = "cipher-proxy"
+version = "0.1.0"
+description = "Example API proxy - Interceptor"
+requires-python = ">=3.11"
+dependencies = [
+    "cryptography>=46.0.5",
+    "requests>=2.32.5",
+    "rest-api-proxy>=0.1.1",
+]
+
+[dependency-groups]
+dev = [
+    "uv>=0.10.8",
+]
