@@ -1,0 +1,13 @@
+[project]
+name = "test-storage-backend"
+version = "0.1.0"
+description = "Example Storage Backend"
+requires-python = ">=3.11"
+dependencies = [
+    "djangorestframework>=3.16.1",
+]
+
+[dependency-groups]
+dev = [
+    "uv>=0.10.8",
+]
