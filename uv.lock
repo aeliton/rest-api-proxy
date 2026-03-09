@@ -291,7 +291,7 @@ wheels = [
 
 [[package]]
 name = "rest-api-proxy"
-source = { virtual = "." }
+source = { editable = "." }
 dependencies = [
     { name = "djangorestframework" },
 ]
