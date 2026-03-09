@@ -77,8 +77,5 @@ class ProxyBase(APIView):
     def process_files(self, request, files: dict) -> dict:
         return files
 
-    def process_request(self, request):
-        return request
-
     def process_response(self, response):
         return response
