@@ -46,10 +46,11 @@ class ProxyBase(APIView):
 
     def _process_headers(self, request):
         # Copy headers that must be forwarded
-        return self.process_headers({
+        headers = {
             k: v for k, v in HttpHeaders(request.META).items()
             if k in self.proxy_settings.FORWARD_HEADERS
-        })
+        }
+        return self.process_headers(request, headers)
 
     def _process_data(self, request):
         if request.content_type.startswith('multipart'):
@@ -59,20 +60,21 @@ class ProxyBase(APIView):
                     data.pop(file, None)
         else:
             data = request.body
-        return self.process_data(data)
+        return self.process_data(request, data)
 
     def _process_files(self, request):
         if request.content_type.startswith('multipart') and request.FILES:
-            return self.process_files({k: v for k, v in request.FILES.items()})
+            files = {k: v for k, v in request.FILES.items()}
+            return self.process_files(request, files)
         return None
 
-    def process_headers(self, headers: dict) -> dict:
+    def process_headers(self, request, headers: dict) -> dict:
         return headers
 
-    def process_data(self, data):
+    def process_data(self, request, data):
         return data
 
-    def process_files(self, files: dict) -> dict:
+    def process_files(self, request, files: dict) -> dict:
         return files
 
     def process_request(self, request):
