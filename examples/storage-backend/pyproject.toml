@@ -5,6 +5,7 @@ description = "Example Storage Backend"
 requires-python = ">=3.11"
 dependencies = [
     "djangorestframework>=3.16.1",
+    "gunicorn>=25.1.0",
 ]
 
 [dependency-groups]
