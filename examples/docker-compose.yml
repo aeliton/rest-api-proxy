@@ -26,5 +26,14 @@ services:
       timeout: 1s
       retries: 5
 
+  tests-e2e:
+    depends_on:
+      cipher:
+        condition: service_healthy
+    build:
+      context: tests
+    volumes:
+      - storage:/opt/storage
+
 volumes:
   storage:
