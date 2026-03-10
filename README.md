@@ -8,48 +8,57 @@ request and the response.
 
 The original use case that motivated this implementation is to have a node
 responsible for the encryption/decryption of payloads, so that cryptographic
-keys are kept separated from the data.
+keys are kept separated from the stored backend data. An example implementation
+of this use case can be found in the `examples` folder.
 
-## TODO
+## General functionality
 
-* Add options to inject extra headers
-* Add extra options to inject authentication data
-* Add examples that alters requests
+`ProxyBase` is a view (inherits DRF's `APIView`) that allow altering incoming
+requests `headers`, `data`, and `files` via inheritance. The base implementation
+always creates a new request to be sent to the target API with the same `data`
+and `files`. The `headers` are specially treated: only the headers explicitly
+defined in the library configuration are forwarded to the target API.
 
-# Usage
-
-## Setting the target server
-
-The target server can be defined in *settings.py* by setting the `HOST` URL
-entry in the `REST_API_PROXY` dictionary as follows:
+The configuration can be made via `settings.py` or via the view constructor.
 
 ```python
 # settings.py
 REST_API_PROXY = {
-    'HOST': 'http://real-handler.com',
+    'HOST': 'http://api.target.com',
+    'FORWARD_HEADERS': ['Authorization'] #  only Authorization will be forwarded
 }
+
+# via constructor
+ProxyBase.as_view(proxy_settings={'HOST': '...', 'FORWARD_HEADERS': [...]})
 ```
 
-This can be set also directly to the instance via:
+To alter `headers`, `data` and `files`, you can do this:
+```python
+class AlterAll(ProxyBase):
+    def process_headers(self, request, headers):
+        return your_custom_headers
+
+    def process_data(self, request, data):
+        return your_custom_data
+
+    def process_files(self, request, files):
+        return your_custom_files
+```
+
+To alter the response received from the target API, you can implement
+`process_response`.
 
 ```python
-proxy = ProxyBase.as_view(proxy_settings={'HOST': 'http://real-handler.com'})
+    def process_response(self, target_api_response):
+        # your magic here
+        return your_custom_response
 ```
 
-## Request altering
+Please refer to the examples folder for more practical details.
 
-Altering the request is achieved by extending the `ProxyBase` class.
+## TODO
 
-```python
-class Proxy(ProxyBase):
-    def process_request(self, request):
-        # alter you request here
-        return request
-
-    def process_response(self, response):
-        # alter you response here
-        return response
-```
+* Add extra options to inject authentication data
 
 ## Development
 
@@ -62,7 +71,14 @@ uv sync --dev
 ## Running tests
 
 ```bash
+# unit tests
 python runtests.py
+
+# E2E tests
+cd examples
+docker compose build
+docker compose up cipher -d
+docker compose run tests-e2e sh test_cipher_e2e.sh
 ```
 
 # License
