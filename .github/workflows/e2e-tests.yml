@@ -1,0 +1,26 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./examples
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Build the Docker images
+      run: |
+        docker compose build
+    - name: Start cipher 
+      run: docker compose up cipher -d
+    - name: Run tests-e2e
+      run: docker compose run tests-e2e sh test_cipher_e2e.sh
