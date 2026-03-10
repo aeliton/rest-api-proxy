@@ -1,4 +1,4 @@
-![build][1] ![docker-image][2]
+![unit-tests][1] ![e2e-tests][2]
 
 # rest-api-proxy
 
@@ -75,5 +75,5 @@ This work is inspired by
 [django-api-proxy](https://github.com/aiselis/django-api-proxy/) (Simplified BSD
 License).
 
-[1]: https://github.com/aeliton/rest-api-proxy/actions/workflows/pypi-publish.yml/badge.svg?branch=main
-[2]: https://github.com/aeliton/rest-api-proxy/actions/workflows/python-app.yml/badge.svg?branch=main
+[1]: https://github.com/aeliton/rest-api-proxy/actions/workflows/python-app.yml/badge.svg?branch=main 
+[2]: https://github.com/aeliton/rest-api-proxy/actions/workflows/e2e-tests.yml/badge.svg?branch=main
