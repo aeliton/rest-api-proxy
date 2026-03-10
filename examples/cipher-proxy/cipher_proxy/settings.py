@@ -9,7 +9,7 @@ SECRET_KEY = get_random_secret_key()
 
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['cipher']
 
 INSTALLED_APPS = [
     "django.contrib.auth",
@@ -26,7 +26,7 @@ DATABASES = {
 ################################################################################
 # rest_api_proxy configuration
 REST_API_PROXY = {
-    'HOST': 'http://127.0.0.1:8000',
+    'HOST': 'http://backend:8080',
 }
 
 # encryption/decription key

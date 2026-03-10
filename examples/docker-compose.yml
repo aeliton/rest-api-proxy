@@ -1,0 +1,30 @@
+name: cipher-interceptor
+
+services:
+  backend:
+    build:
+      context: storage-backend
+    volumes:
+      - storage:/opt/storage
+    healthcheck:
+      test: ["CMD", "nc", "-z", "0.0.0.0", "8080"]
+      interval: 1s
+      timeout: 1s
+      retries: 5
+
+  cipher:
+    depends_on:
+      backend:
+        condition: service_healthy
+    build:
+      context: cipher-proxy
+    ports:
+      - "8080:8080"
+    healthcheck:
+      test: ["CMD", "nc", "-z", "0.0.0.0", "8080"]
+      interval: 1s
+      timeout: 1s
+      retries: 5
+
+volumes:
+  storage:

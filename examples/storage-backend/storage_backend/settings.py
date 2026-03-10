@@ -7,6 +7,8 @@ SECRET_KEY = get_random_secret_key()
 
 DEBUG = True
 
+MEDIA_ROOT = '/opt/storage'
+
 ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
