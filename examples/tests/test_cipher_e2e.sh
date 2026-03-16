@@ -62,7 +62,7 @@ testDownloadAfterUploadSucceedsFromProxy() {
 
 testDownloadAfterUploadRetrievesUnencryptedFile() {
   curl -s -X POST -F "file=@${INPUT_FILE_PATH}" ${PROXY_API}/
-  CONTENT=$(curl ${PROXY_API}/${INPUT_FILE_NAME})
+  CONTENT=$(curl -s ${PROXY_API}/${INPUT_FILE_NAME})
   assertEquals ${INPUT_FILE_CONTENT} ${CONTENT}
 }
 # ------------------------------------------------------------------------------
