@@ -2,6 +2,7 @@
 # can be implemented for django. Use this at your own risk.
 from pathlib import Path
 from django.core.management.utils import get_random_secret_key
+from cryptography.fernet import Fernet
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -30,5 +31,5 @@ REST_API_PROXY = {
 }
 
 # encryption/decription key
-CIPHER_KEY = b'Xq-1c8C_yd4PepR_PofObx251YdzqM9-QUiI3I7ajzc='
+CIPHER_KEY = Fernet.generate_key()
 ################################################################################
