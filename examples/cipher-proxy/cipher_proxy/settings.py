@@ -30,6 +30,6 @@ REST_API_PROXY = {
     'HOST': 'http://backend:8080',
 }
 
-# encryption/decription key
+# encryption/description key
 CIPHER_KEY = Fernet.generate_key()
 ################################################################################
