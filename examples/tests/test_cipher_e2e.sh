@@ -49,19 +49,19 @@ testUpload() {
 }
 
 testUploadedFileIsBiggerThanInputFile() {
-  curl -X POST -F "file=@${INPUT_FILE_PATH}" ${PROXY_API}/
+  curl -s -X POST -F "file=@${INPUT_FILE_PATH}" ${PROXY_API}/
   STORED_SIZE=$(stat -c %s ${STORAGE_PATH}/${INPUT_FILE_NAME})
   assertTrue "[ ${STORED_SIZE} -gt ${#INPUT_FILE_CONTENT} ]"
 }
 
 testDownloadAfterUploadSucceedsFromProxy() {
-  curl -X POST -F "file=@${INPUT_FILE_PATH}" ${PROXY_API}/
+  curl -s -X POST -F "file=@${INPUT_FILE_PATH}" ${PROXY_API}/
   HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" ${PROXY_API}/${INPUT_FILE_NAME})
   assertEquals 200 ${HTTP_STATUS}
 }
 
 testDownloadAfterUploadRetrievesUnencryptedFile() {
-  curl -X POST -F "file=@${INPUT_FILE_PATH}" ${PROXY_API}/
+  curl -s -X POST -F "file=@${INPUT_FILE_PATH}" ${PROXY_API}/
   CONTENT=$(curl ${PROXY_API}/${INPUT_FILE_NAME})
   assertEquals ${INPUT_FILE_CONTENT} ${CONTENT}
 }
